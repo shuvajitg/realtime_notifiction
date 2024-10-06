@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "../context/Create_context";
 import { IoIosNotifications } from "react-icons/io";
 import { supabase } from "../supabaseClient";
+import { Card, CardContent } from "./ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "./ui/button";
 
 function Notifiction() {
   const [count, setCount] = useState(0);
@@ -11,6 +17,8 @@ function Notifiction() {
   const [updateData, setUpdateData] = useState(null);
 
   const handleNotification = async () => {
+    console.log("click");
+
     try {
       if (!open) {
         setOpen(true);
@@ -86,26 +94,49 @@ function Notifiction() {
             </div>
           )}
         </div>
-        <IoIosNotifications
-          onClick={handleNotification}
-          className="text-4xl cursor-pointer"
-        />
+        <DropdownMenu className="absolute">
+          <Button
+            className="cursor-pointer"
+            onClick={handleNotification}
+            size="icon"
+          >
+            <IoIosNotifications className="h-4 w-4" />
+          </Button>
+          {open && 
+          <DropdownMenuContent align="end" className="w-64">
+            {notifiction.length === 0 ? (
+              <div> Empty </div>
+            ) : (
+              <div>
+                {" "}
+                {notifiction.map((data, index) => (
+                  <div className="" key={index}>
+                    <p className="mt-2">{data.activity}</p>
+                  </div>
+                ))}{" "}
+              </div>
+            )}
+          </DropdownMenuContent>
+          }
+        </DropdownMenu>
         <div className="absolute mt-28">
           {open && (
-            <div className="h-auto w-auto bg-blue-950 p-3 text-white">
-              {notifiction.length === 0 ? (
-                <div> Empty </div>
-              ) : (
-                <div>
-                  {" "}
-                  {notifiction.map((data, index) => (
-                    <div key={index}>
-                      <p>{data.activity}</p>
-                    </div>
-                  ))}{" "}
-                </div>
-              )}
-            </div>
+            <Card className="w-[300px] bg-blue-950 text-white">
+              <CardContent className="flex flex-col items-center mt-3">
+                {notifiction.length === 0 ? (
+                  <div> Empty </div>
+                ) : (
+                  <div>
+                    {" "}
+                    {notifiction.map((data, index) => (
+                      <div className="" key={index}>
+                        <p className="mt-2">{data.activity}</p>
+                      </div>
+                    ))}{" "}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>
