@@ -10,26 +10,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { Badge, Bell } from "lucide-react";
+import { Bell } from "lucide-react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { format } from "date-fns";
 
 function Notifiction() {
   const [count, setCount] = useState(0);
   const { notifiction } = useAppContext();
-  const [open, setOpen] = useState(false);
   const [notifictionId, setNotifictionId] = useState("");
   const [updateData, setUpdateData] = useState(null);
 
   const handleNotification = async () => {
-    console.log("click");
-
     try {
-      if (!open) {
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
       await notifiction.filter((data) => {
         if (data.is_read == false) {
           const id = data.notifiction_id;
@@ -91,12 +83,7 @@ function Notifiction() {
             <Button variant="outline" size="icon" className="relative">
               <Bell className="h-4 w-4" />
               {count > 0 && (
-                <Badge
-                  variant="destructive"
-                  className="absolute -top-2 -right-2 px-2 py-1 text-xs"
-                >
-                  {count}
-                </Badge>
+                <div className="absolute -top-2 -right-2 px-2 py-1 text-xs bg-red-600 rounded-full text-white">{count}</div>
               )}
             </Button>
           </DropdownMenuTrigger>
@@ -118,6 +105,7 @@ function Notifiction() {
                         variant="ghost"
                         size="sm"
                         className="bg-slate-100 hover:bg-slate-50"
+                        onClick={handleNotification}
                       >
                         Mark as read
                       </Button>
