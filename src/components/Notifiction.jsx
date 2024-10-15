@@ -98,7 +98,7 @@ function Notifiction() {
                     className="flex flex-col items-start p-4"
                   >
                     <div className="flex justify-between w-full">
-                      <span className="font-medium truncate">
+                      <span className="font-medium text-xs line-clamp-3">
                         {notification.activity}
                       </span>
                       <Button
