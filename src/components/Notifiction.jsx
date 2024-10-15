@@ -98,7 +98,7 @@ function Notifiction() {
                     className="flex flex-col items-start p-4"
                   >
                     <div className="flex justify-between w-full">
-                      <span className="font-medium">
+                      <span className="font-medium truncate">
                         {notification.activity}
                       </span>
                       <Button
@@ -107,10 +107,16 @@ function Notifiction() {
                         className="bg-slate-100 hover:bg-slate-50"
                         onClick={handleNotification}
                       >
-                        Mark as read
+                        {
+                          notification.is_read === false? (
+                            "Mark as read"
+                          ) : (
+                            "Undo"
+                          )
+                        }
                       </Button>
                     </div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                    <span className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-5">
                       {format(notification.created_at, "MMM d, yyyy HH:mm")}
                     </span>
                   </DropdownMenuItem>
