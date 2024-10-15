@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/Create_context";
-import { IoIosNotifications } from "react-icons/io";
 import { supabase } from "../supabaseClient";
-import { Card, CardContent } from "./ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { Badge, Bell } from "lucide-react";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { format } from "date-fns";
 
 function Notifiction() {
   const [count, setCount] = useState(0);
@@ -81,64 +86,55 @@ function Notifiction() {
   return (
     <div className="py-2 px-4">
       <div className="flex flex-col items-end justify-center relative mt-2">
-        <div className="absolute -mt-8 pl-5">
-          {!notifiction ? (
-            <div>{""}</div>
-          ) : (
-            <div className="bg-red-600 text-white px-1.5 rounded-full">
-              {count >= 1 ? (
-                <div>{count}</div>
-              ) : (
-                <div className="hidden">{}</div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="relative">
+              <Bell className="h-4 w-4" />
+              {count > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-2 -right-2 px-2 py-1 text-xs"
+                >
+                  {count}
+                </Badge>
               )}
-            </div>
-          )}
-        </div>
-        <DropdownMenu className="absolute">
-          <Button
-            className="cursor-pointer"
-            onClick={handleNotification}
-            size="icon"
-          >
-            <IoIosNotifications className="h-4 w-4" />
-          </Button>
-          {open && 
-          <DropdownMenuContent align="end" className="w-64">
-            {notifiction.length === 0 ? (
-              <div> Empty </div>
-            ) : (
-              <div>
-                {" "}
-                {notifiction.map((data, index) => (
-                  <div className="" key={index}>
-                    <p className="mt-2">{data.activity}</p>
-                  </div>
-                ))}{" "}
-              </div>
-            )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <ScrollArea className="h-[300px]">
+              {notifiction.length > 0 ? (
+                notifiction.map((notification, index) => (
+                  <DropdownMenuItem
+                    key={index}
+                    className="flex flex-col items-start p-4"
+                  >
+                    <div className="flex justify-between w-full">
+                      <span className="font-medium">
+                        {notification.activity}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="bg-slate-100 hover:bg-slate-50"
+                      >
+                        Mark as read
+                      </Button>
+                    </div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {format(notification.created_at, "MMM d, yyyy HH:mm")}
+                    </span>
+                  </DropdownMenuItem>
+                ))
+              ) : (
+                <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                  No new notifications
+                </div>
+              )}
+            </ScrollArea>
           </DropdownMenuContent>
-          }
         </DropdownMenu>
-        <div className="absolute mt-28">
-          {open && (
-            <Card className="w-[300px] bg-blue-950 text-white">
-              <CardContent className="flex flex-col items-center mt-3">
-                {notifiction.length === 0 ? (
-                  <div> Empty </div>
-                ) : (
-                  <div>
-                    {" "}
-                    {notifiction.map((data, index) => (
-                      <div className="" key={index}>
-                        <p className="mt-2">{data.activity}</p>
-                      </div>
-                    ))}{" "}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-        </div>
       </div>
     </div>
   );
